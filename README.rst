@@ -25,7 +25,7 @@ Install from GitHub for the latest (unstable) version.
 
 .. code:: console
 
-    git clone https://github.com/theOGognf/finagg.git
+    git clone https://github.com/GabrielBalan90/finagg.git
     pip install ./finagg/
 
 Optionally install the recommended datasets from 3rd party APIs into a local

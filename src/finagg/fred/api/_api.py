@@ -61,11 +61,10 @@ def pformat(**kwargs: Any) -> dict[str, Any]:
     kwargs = {k: v for k, v in kwargs.items() if v is not None}
     for k in ("observation_start", "observation_end", "realtime_start", "realtime_end"):
         if k in kwargs:
-            match kwargs[k]:
-                case 0:
-                    kwargs[k] = "1776-07-04"
-                case -1:
-                    kwargs[k] = "9999-12-31"
+            if kwargs[k] == 0:
+                kwargs[k] = "1776-07-04"
+            if kwargs[k] == -1:
+                kwargs[k] = "9999-12-31"
 
     for k in ("exclude_tag_names", "tag_names"):
         if k in kwargs:

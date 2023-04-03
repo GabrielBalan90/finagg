@@ -2,14 +2,14 @@
 
 import pandas as pd
 import yfinance as yf
-
+from typing import Union
 
 def get(
     ticker: str,
     /,
     *,
-    start: None | str = None,
-    end: None | str = None,
+    start: Union[None, str] = None,
+    end: Union[None, str] = None,
     interval: str = "1d",
     period: str = "max",
     debug: bool = False,

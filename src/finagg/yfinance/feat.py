@@ -8,6 +8,7 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import NoResultFound
 from tqdm import tqdm
+from typing import Union
 
 from .. import backend, feat, indices, utils
 from . import api, sql
@@ -65,7 +66,7 @@ class RefinedDaily(feat.Features):
 
     @classmethod
     def from_api(
-        cls, ticker: str, /, *, start: None | str = None, end: None | str = None
+        cls, ticker: str, /, *, start: Union[None, str] = None, end: Union[None, str] = None
     ) -> pd.DataFrame:
         """Get daily features directly from :meth:`finagg.yfinance.api.get`.
 
@@ -101,9 +102,9 @@ class RefinedDaily(feat.Features):
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get daily features from local SQL tables.
 
@@ -157,9 +158,9 @@ class RefinedDaily(feat.Features):
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from the feature-dedicated local SQL tables.
 
@@ -216,7 +217,7 @@ class RefinedDaily(feat.Features):
 
     @classmethod
     def get_candidate_ticker_set(
-        cls, lb: int = 1, *, engine: None | Engine = None
+        cls, lb: int = 1, *, engine: Union[None, Engine] = None
     ) -> set[str]:
         """Get all unique tickers in the raw SQL table that MAY BE ELIGIBLE
         to be in the feature's refined SQL table.
@@ -240,7 +241,7 @@ class RefinedDaily(feat.Features):
         return sql.get_ticker_set(lb=lb, engine=engine)
 
     @classmethod
-    def get_ticker_set(cls, lb: int = 1, *, engine: None | Engine = None) -> set[str]:
+    def get_ticker_set(cls, lb: int = 1, *, engine: Union[None, Engine] = None) -> set[str]:
         """Get all unique tickers in the feature's SQL table.
 
         Args:
@@ -278,7 +279,7 @@ class RefinedDaily(feat.Features):
 
     @classmethod
     def install(
-        cls, tickers: None | set[str] = None, *, engine: None | Engine = None
+        cls, tickers: Union[None, set[str]] = None, *, engine: Union[None, Engine] = None
     ) -> int:
         """Drop the feature's table, create a new one, and insert data
         transformed from the raw SQL table.
@@ -325,7 +326,7 @@ class RefinedDaily(feat.Features):
         df: pd.DataFrame,
         /,
         *,
-        engine: None | Engine = None,
+        engine: Union[None, Engine] = None,
     ) -> int:
         """Write the given dataframe to the refined feature table
         while using the ticker ``ticker``.
@@ -370,9 +371,9 @@ class RawPrices:
     @classmethod
     def install(
         cls,
-        tickers: None | set[str] = None,
+        tickers: Union[None, set[str]] = None,
         *,
-        engine: None | Engine = None,
+        engine: Union[None, Engine] = None,
     ) -> int:
         """Drop the feature's table, create a new one, and insert data
         as-is using Yahoo! Finance.
@@ -418,9 +419,9 @@ class RawPrices:
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get a single company's daily stock history as-is from raw
         Yahoo! Finance SQL tables.
@@ -478,7 +479,7 @@ class RawPrices:
         return df.set_index(["date"]).sort_index()
 
     @classmethod
-    def to_raw(cls, df: pd.DataFrame, /, *, engine: None | Engine = None) -> int:
+    def to_raw(cls, df: pd.DataFrame, /, *, engine: Union[None, Engine] = None) -> int:
         """Write the given dataframe to the raw feature table.
 
         Args:

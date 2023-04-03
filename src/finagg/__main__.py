@@ -3,7 +3,7 @@
 import logging
 import os
 import pathlib
-from typing import Literal
+from typing import Literal, Union
 
 import click
 
@@ -127,10 +127,10 @@ def install(
     ctx: click.Context,
     skip: list[str] = [],
     series: list[str] = [],
-    series_set: None | Literal["economic"] = None,
+    series_set: Union[None, Literal["economic"]] = None,
     stock_data: bool = False,
     ticker: list[str] = [],
-    ticker_set: None | Literal["indices", "sec"] = None,
+    ticker_set: Union[None, Literal["indices", "sec"]] = None,
     verbose: bool = False,
 ) -> None:
     if "FINAGG_ROOT_PATH" not in os.environ:

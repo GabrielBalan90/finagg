@@ -6,7 +6,7 @@ import pathlib
 import re
 from datetime import datetime
 from pathlib import Path
-
+from typing import List, Union
 import numpy as np
 import pandas as pd
 from dotenv import set_key
@@ -33,27 +33,21 @@ def CamelCase(s: str, /) -> str:
     """
     return "".join(word.title() for word in s.split("_"))
 
-
-def expand_csv(values: str | list[str], /) -> set[str]:
+def expand_csv(values: Union[str, list[str]], /) -> set[str]:
     """Expand the given list of strings into a set of strings, where each value
     in the list of strings could be:
-
         1. Comma-separated values
         2. A path that points to a CSV file containing values
         3. A regular ol' string
-
     Args:
         values: List of strings denoting comma-separated values,
             or CSV files containing comma-separated values.
-
     Returns:
         A set of all strings found within the given list.
-
     Examples:
         >>> ts = finagg.utils.expand_csv(["AAPL,MSFT"])
         >>> "AAPL" in ts
         True
-
     """
     if isinstance(values, str):
         values = [values]
@@ -73,7 +67,7 @@ def expand_csv(values: str | list[str], /) -> set[str]:
     return out
 
 
-def join_with(s: str | list[str], /, delim: str) -> str:
+def join_with(s: Union[str, List[str]], /, delim: str) -> str:
     """Join a sequence of strings with the delimiter ``delim``.
 
     Examples:

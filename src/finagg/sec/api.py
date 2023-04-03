@@ -24,7 +24,7 @@ import os
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from functools import cache
-from typing import Any, ClassVar, TypedDict
+from typing import Any, ClassVar, TypedDict, Union, Optional
 
 import pandas as pd
 import requests
@@ -95,7 +95,7 @@ class _API(ABC):
 
     @classmethod
     @abstractmethod
-    def get(cls, *args: Any, **kwargs: Any) -> pd.DataFrame | SubmissionsResult:
+    def get(cls, *args: Any, **kwargs: Any) -> Union[pd.DataFrame, SubmissionsResult]:
         """Main dataset API method."""
 
 
@@ -121,11 +121,11 @@ class CompanyConcept(_API):
         tag: str,
         /,
         *,
-        cik: None | str = None,
-        ticker: None | str = None,
+        cik: Union[None, str] = None,
+        ticker: Union[None, str] = None,
         taxonomy: str = "us-gaap",
         units: str = "USD",
-        user_agent: None | str = None,
+        user_agent: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Return all XBRL disclosures for a single company (CIK)
         and concept (a taxonomy and tag) in a single dataframe.
@@ -201,9 +201,9 @@ class CompanyFacts(_API):
         cls,
         /,
         *,
-        cik: None | str = None,
-        ticker: None | str = None,
-        user_agent: None | str = None,
+        cik: Union[None, str] = None,
+        ticker: Union[None, str] = None,
+        user_agent: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Return all XBRL disclosures for a single company (CIK).
 
@@ -281,14 +281,14 @@ class Frames(_API):
     def get(
         cls,
         tag: str,
-        year: int | str,
+        year: Union[int, str],
         /,
-        quarter: None | int | str = None,
+        quarter: Union[None, int, str] = None,
         *,
         instant: bool = True,
         taxonomy: str = "us-gaap",
         units: str = "USD",
-        user_agent: None | str = None,
+        user_agent: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get one fact for each reporting entity that most closely fits
         the calendrical period requested.
@@ -374,9 +374,9 @@ class Submissions(_API):
         cls,
         /,
         *,
-        cik: None | str = None,
-        ticker: None | str = None,
-        user_agent: None | str = None,
+        cik: Union[None, str] = None,
+        ticker: Union[None, str] = None,
+        user_agent: Union[None, str] = None,
     ) -> SubmissionsResult:
         """Return a company's metadata and all its recent SEC filings.
 
@@ -446,7 +446,7 @@ class Tickers(_API):
     url = "https://www.sec.gov/files/company_tickers.json"
 
     @classmethod
-    def get(cls, *, user_agent: None | str = None) -> pd.DataFrame:
+    def get(cls, *, user_agent: Union[None, str] = None) -> pd.DataFrame:
         """Get a dataframe containing all SEC-registered ticker
         info.
 
@@ -570,7 +570,7 @@ assets, etc..
 
 
 @ratelimit.guard([ratelimit.RequestLimit(9, timedelta(seconds=1))])
-def _get(url: str, /, *, user_agent: None | str = None) -> requests.Response:
+def _get(url: str, /, *, user_agent: Union[None, str] = None) -> requests.Response:
     """SEC EDGAR API request helper.
 
     Args:
@@ -597,7 +597,7 @@ def _get(url: str, /, *, user_agent: None | str = None) -> requests.Response:
     return response
 
 
-def get_cik(ticker: str, /, *, user_agent: None | str = None) -> str:
+def get_cik(ticker: str, /, *, user_agent: Union[None, str] = None) -> str:
     """Return a company's SEC CIK from its ticker.
 
     Args:
@@ -625,7 +625,7 @@ def get_cik(ticker: str, /, *, user_agent: None | str = None) -> str:
     return _tickers_to_cik[ticker.upper()]
 
 
-def get_ticker(cik: str, /, *, user_agent: None | str = None) -> str:
+def get_ticker(cik: str, /, *, user_agent: Union[None, str] = None) -> str:
     """Return a company's ticker from its SEC CIK.
 
     Args:
@@ -655,7 +655,7 @@ def get_ticker(cik: str, /, *, user_agent: None | str = None) -> str:
 
 
 @cache
-def get_ticker_set(*, user_agent: None | str = None) -> set[str]:
+def get_ticker_set(*, user_agent: Union[None, str] = None) -> set[str]:
     """Get the set of tickers that published data for popular concepts
     during any of the quarters for the previous year.
 

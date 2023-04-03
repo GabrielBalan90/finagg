@@ -34,7 +34,7 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from datetime import timedelta
-from typing import Any, ClassVar, Literal, Sequence
+from typing import Any, ClassVar, Literal, Sequence, Union, Optional, List
 
 import pandas as pd
 import requests
@@ -53,7 +53,7 @@ session = requests_cache.CachedSession(
     expire_after=timedelta(days=1),
 )
 
-_YEAR = int | str
+_YEAR = Union[int, str]
 
 
 class _API(ABC):
@@ -68,13 +68,14 @@ class _API(ABC):
         """Main dataset API method."""
 
     @classmethod
-    def get_parameter_list(cls, /, *, api_key: None | str = None) -> pd.DataFrame:
+    # def get_parameter_list(cls, /, *, api_key: None | str = None) -> pd.DataFrame:
+    def get_parameter_list(cls, /, *, api_key: Optional[str] = None) -> pd.DataFrame:
         """Return the list of parameters associated with the dataset API."""
         return _get_parameter_list(cls.name, api_key=api_key)
 
     @classmethod
     def get_parameter_values(
-        cls, param: str, /, *, api_key: None | str = None
+        cls, param: str, /, *, api_key: Optional[str] = None
     ) -> pd.DataFrame:
         """Return all possible parameter values associated with the dataset API."""
         return _get_parameter_values(cls.name, param, api_key=api_key)
@@ -88,10 +89,10 @@ class FixedAssets(_API):
     @classmethod
     def get(
         cls,
-        table_id: str | Sequence[str] = "ALL",
-        year: _YEAR | Sequence[_YEAR] = "ALL",
+        table_id: Union[str, Sequence[str]] = "ALL",
+        year: Union[_YEAR, Sequence[_YEAR]] = "ALL",
         *,
-        api_key: None | str = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get US fixed assets by asset and year.
 
@@ -187,15 +188,24 @@ class GDPByIndustry(_API):
 
     name = "GdpByIndustry"
 
+    # @classmethod
+    # def get(
+    #     cls,
+    #     table_id: Union[str, List[str]] = "ALL",
+    #     freq: Literal["A", "Q", "A,Q"] = "Q",
+    #     year: Union[_YEAR, Sequence[_YEAR]] = "ALL",
+    #     industry: Union[str, List[str]] = "ALL",
+    #     *,
+    #     api_key: Optional[str] = None,
     @classmethod
     def get(
         cls,
-        table_id: str | Sequence[str] = "ALL",
+        table_id: Union[str, List[str]] = "ALL",
         freq: Literal["A", "Q", "A,Q"] = "Q",
-        year: _YEAR | Sequence[_YEAR] = "ALL",
-        industry: str | Sequence[str] = "ALL",
+        year: Union[_YEAR, Sequence[_YEAR]] = "ALL",
+        industry: Union[str, List[str]] = "ALL",
         *,
-        api_key: None | str = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get GDP by industry.
 
@@ -290,10 +300,10 @@ class InputOutput(_API):
     @classmethod
     def get(
         cls,
-        table_id: str | Sequence[str] = "ALL",
-        year: _YEAR | Sequence[_YEAR] = "ALL",
+        table_id: Union[str, List[str]] = "ALL",
+        year: Union[_YEAR, Sequence[_YEAR]] = "ALL",
         *,
-        api_key: None | str = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get input-output statistics by industry.
 
@@ -362,11 +372,11 @@ class NIPA(_API):
     @classmethod
     def get(
         cls,
-        table_id: str | Sequence[str] = "ALL",
+        table_id: Union[str, List[str]] = "ALL",
         freq: Literal["A", "Q", "A,Q"] = "Q",
-        year: _YEAR | Sequence[_YEAR] = "ALL",
+        year: Union[_YEAR, Sequence[_YEAR]] = "ALL",
         *,
-        api_key: None | str = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get US income and product accounts by metric.
 
@@ -474,7 +484,7 @@ def _get(
     params: dict[str, Any],
     /,
     *,
-    api_key: None | str = None,
+    api_key: Optional[str] = None,
 ) -> dict[str, list[dict[str, Any]]]:
     """Main get method used by dataset APIs.
 
@@ -513,7 +523,8 @@ def _get(
     return content["Results"]  # type: ignore
 
 
-def _get_parameter_list(dataset: str, /, *, api_key: None | str = None) -> pd.DataFrame:
+# def _get_parameter_list(dataset: str, /, *, api_key: None | str = None) -> pd.DataFrame:
+def _get_parameter_list(dataset: str, *, api_key: Optional[str] = None) -> pd.DataFrame:
     """Get a dataset's list of parameters.
 
     Args:
@@ -533,7 +544,7 @@ def _get_parameter_list(dataset: str, /, *, api_key: None | str = None) -> pd.Da
 
 
 def _get_parameter_values(
-    dataset: str, param: str, /, *, api_key: None | str = None
+    dataset: str, param: str, /, *, api_key: Optional[str] = None
 ) -> pd.DataFrame:
     """Get potential values for a dataset's parameter.
 
@@ -567,7 +578,7 @@ def _guarded_get(url: str, params: dict[str, Any], /) -> requests.Response:
     return session.get(url, params=params)
 
 
-def get_dataset_list(*, api_key: None | str = None) -> pd.DataFrame:
+def get_dataset_list(*, api_key: Optional[str] = None) -> pd.DataFrame:
     """Return a list of datasets provided by the BEA API.
 
     Returns:

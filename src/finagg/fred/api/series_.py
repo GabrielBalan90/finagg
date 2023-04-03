@@ -13,7 +13,7 @@ See the official FRED API docs for more info:
 """
 
 import pandas as pd
-
+from typing import Union, Optional
 from . import _api
 
 
@@ -34,9 +34,9 @@ class Categories(_api.API):
         series_id: str,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get the categories for an economic data series.
 
@@ -90,19 +90,19 @@ class Observations(_api.API):
         series_id: str,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 100000,
-        offset: None | int = 0,
-        sort_order: None | str = None,
-        observation_start: None | int | str = None,
-        observation_end: None | int | str = None,
-        units: None | str = "lin",
-        frequency: None | str = None,
-        aggregation_method: None | str = "avg",
-        output_type: None | int = 1,
-        vintage_dates: None | str | list[str] = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        sort_order: Union[None, str] = None,
+        observation_start: Union[None,int, str] = None,
+        observation_end: Union[None,int, str] = None,
+        units: Union[None, str] = "lin",
+        frequency: Union[None, str] = None,
+        aggregation_method: Union[None, str] = "avg",
+        output_type: Union[None, int] = 1,
+        vintage_dates: Union[None, str, list[str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the observations or data values for an economic data series.
 
@@ -238,9 +238,9 @@ class Release(_api.API):
         series_id: str,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the release for an economic data series.
 
@@ -286,20 +286,20 @@ class SearchRelatedTags(_api.API):
     @classmethod
     def get(
         cls,
-        series_search_text: None | str | list[str],
+        series_search_text: Union[None, str, list[str]],
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        tag_search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        tag_names: Union[str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        tag_group_id: Optional[Union[int, str]] = None,
+        tag_search_text: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the related tags for a series search.
 
@@ -390,19 +390,18 @@ class SearchTags(_api.API):
     @classmethod
     def get(
         cls,
-        series_search_text: None | str | list[str],
+        series_search_text: Union[None, str, list[str]],
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        tag_search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        tag_group_id: Union[None, str] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the tags for a series search.
 
@@ -506,21 +505,21 @@ class Search(_api.API):
     @classmethod
     def get(
         cls,
-        search_text: str | list[str],
+        search_text: Union[str, list[str]],
         /,
         *,
-        search_type: None | str = "full_text",
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        filter_variable: None | str = None,
-        filter_value: None | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        api_key: None | str = None,
+        search_type: Optional[Union[None, str]] = "full_text",
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        filter_variable: Union[None, str] = None,
+        filter_value: Union[None, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get economic data series that match search text.
 
@@ -624,11 +623,16 @@ class Tags(_api.API):
         series_id: str,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        # realtime_start: None | int | str = None,
+        # realtime_end: None | int | str = None,
+        # order_by: None | str = None,
+        # sort_order: None | str = None,
+        # api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get the FRED tags for a series.
 
@@ -697,14 +701,14 @@ class Updates(_api.API):
     def get(
         cls,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        filter_value: None | str = None,
-        start_time: None | str = None,
-        end_time: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        filter_value: Union[None, str] = None,
+        start_time: Union[None, str] = None,
+        end_time: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get economic data series sorted by when observations
         were updated on the FRED server.
@@ -774,12 +778,12 @@ class VintageDates(_api.API):
         series_id: str,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 10000,
-        offset: None | int = 0,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the dates in history when a series' data values were revised
         or new data values were released.
@@ -889,9 +893,9 @@ class Series(_api.API):
         series_id: str,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get an economic data series.
 

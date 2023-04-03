@@ -7,7 +7,7 @@ See the official FRED API docs for more info:
 """
 
 import pandas as pd
-
+from typing import Union, Optional
 from . import _api
 
 
@@ -27,9 +27,9 @@ class Children(_api.API):
         cls,
         category_id: int = 0,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get all child categories for a specific parent category.
 
@@ -91,9 +91,9 @@ class Related(_api.API):
         category_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        api_key: Optional[str] = None,
     ) -> pd.DataFrame:
         """Get categories related to a category.
 
@@ -145,17 +145,17 @@ class Series(_api.API):
         category_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        filter_variable: None | str = None,
-        filter_value: None | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        filter_variable: Union[None, str] = None,
+        filter_value: Union[None, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get series within a category.
 
@@ -245,16 +245,17 @@ class Tags(_api.API):
         category_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        filter_variable: Union[None, str] = None,
+        filter_value: Union[None, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get a FRED category's tags.
 
@@ -345,17 +346,17 @@ class RelatedTags(_api.API):
         category_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        filter_variable: Union[None, str] = None,
+        filter_value: Union[None, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get data for tags related to a category.
 
@@ -487,7 +488,7 @@ class Category(_api.API):
     url = "https://api.stlouisfed.org/fred/category"
 
     @classmethod
-    def get(cls, category_id: int = 0, *, api_key: None | str = None) -> pd.DataFrame:
+    def get(cls, category_id: int = 0, *, api_key: Optional[str] = None) -> pd.DataFrame:
         """Get a category's details.
 
         Args:

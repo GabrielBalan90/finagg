@@ -1,7 +1,7 @@
 """Testing utils used for ``finagg``'s own unit tests."""
 
 import pathlib
-from typing import Generator
+from typing import Generator, Union
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
@@ -11,8 +11,8 @@ def sqlite_engine(
     path: str,
     /,
     *,
-    metadata: None | sa.MetaData = None,
-    table: None | sa.Table = None,
+    metadata: Union[None, sa.MetaData] = None,
+    table: Union[None, sa.Table] = None,
 ) -> Generator[Engine, None, None]:
     """Yield a test database engine that's cleaned-up after
     usage.

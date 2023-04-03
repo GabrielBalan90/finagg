@@ -7,7 +7,7 @@ See the official FRED API docs for more info:
 """
 
 import pandas as pd
-
+from typing import Union, Optional
 from . import _api
 
 
@@ -26,17 +26,13 @@ class RelatedTags(_api.API):
     def get(
         cls,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get data for tags related to an economic release.
 
@@ -123,15 +119,24 @@ class Series(_api.API):
     def get(
         cls,
         *,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        # tag_names: None | str | list[str] = None,
+        # exclude_tag_names: None | str | list[str] = None,
+        # realtime_start: None | int | str = None,
+        # realtime_end: None | int | str = None,
+        # limit: None | int = 1000,
+        # offset: None | int = 0,
+        # order_by: None | str = None,
+        # sort_order: None | str = None,
+        # api_key: None | str = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the economic data series matching tags.
 
@@ -219,16 +224,26 @@ class Tags(_api.API):
     def get(
         cls,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        # realtime_start: None | int | str = None,
+        # realtime_end: None | int | str = None,
+        # tag_names: None | str | list[str] = None,
+        # tag_group_id: None | str = None,
+        # search_text: None | str | list[str] = None,
+        # limit: None | int = 1000,
+        # offset: None | int = 0,
+        # order_by: None | str = None,
+        # sort_order: None | str = None,
+        # api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        tag_group_id: Union[None, str] = None,
+        search_text: Union[None, str, list[str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get the FRED tags for a series.
 

@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Literal
+from typing import Literal, Union
 
 import click
 
@@ -107,7 +107,7 @@ def install(
     refined: list[Literal["quarterly", "quarterly.normalized"]] = [],
     all_: bool = False,
     ticker: list[str] = [],
-    ticker_set: None | Literal["indices", "sec"] = None,
+    ticker_set: Union[None, Literal["indices", "sec"]] = None,
     verbose: bool = False,
 ) -> int:
     if verbose:
@@ -139,11 +139,11 @@ def install(
 
     all_tickers = utils.expand_csv(ticker)
     if all_raw:
-        match ticker_set:
-            case "indices":
-                all_tickers |= indices.api.get_ticker_set()
-            case "sec":
-                all_tickers |= _api.get_ticker_set()
+        ticker_set = ticker_set.lower()
+    if ticker_set == "indices":
+        all_tickers |= indices.api.get_ticker_set()
+    elif ticker_set == "sec":
+        all_tickers |= _api.get_ticker_set()
 
         if not all_tickers:
             logger.info(

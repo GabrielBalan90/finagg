@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Literal
+from typing import Literal, Union
 
 import click
 
@@ -98,7 +98,7 @@ def install(
     refined: list[Literal["economic", "economic.normalized"]] = [],
     all_: bool = False,
     series: list[str] = [],
-    series_set: None | Literal["economic"] = None,
+    series_set: Union[None, Literal["economic"]] = None,
     verbose: bool = False,
 ) -> int:
     if verbose:
@@ -128,18 +128,30 @@ def install(
     elif raw:
         all_raw = set(raw)
 
+    # all_series = utils.expand_csv(series)
+    # if all_raw:
+    #     match series_set:
+    #         case "economic":
+    #             all_series |= set(_feat.economic.series_ids)
+
+    #     if not all_series:
+    #         logger.info(
+    #             f"Skipping {__package__} installation because no series were "
+    #             "provided (by the `series` option or by the `series-set` option)"
+    #         )
+    #         return total_rows
+
     all_series = utils.expand_csv(series)
     if all_raw:
-        match series_set:
-            case "economic":
-                all_series |= set(_feat.economic.series_ids)
+        if series_set == "economic":
+            all_series |= set(_feat.economic.series_ids)
 
-        if not all_series:
-            logger.info(
-                f"Skipping {__package__} installation because no series were "
-                "provided (by the `series` option or by the `series-set` option)"
-            )
-            return total_rows
+    if not all_series:
+        logger.info(
+            f"Skipping {__package__} installation because no series were "
+            "provided (by the `series` option or by the `series-set` option)"
+        )
+        return total_rows
 
     if "series" in all_raw:
         total_rows += _feat.series.install(all_series)

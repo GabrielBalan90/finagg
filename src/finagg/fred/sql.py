@@ -3,7 +3,7 @@
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
-
+from typing import Union
 from .. import backend
 
 metadata = sa.MetaData()
@@ -62,7 +62,7 @@ normalized_economic = sa.Table(
 )
 
 
-def get_id_set(lb: int = 1, *, engine: None | Engine = None) -> set[str]:
+def get_id_set(lb: int = 1, *, engine: Union[None, Engine] = None) -> set[str]:
     """Get all unique economic series IDs in the raw SQL tables that have at least
     ``lb`` rows.
 

@@ -4,7 +4,7 @@ import os
 from abc import ABC, abstractmethod
 from datetime import timedelta
 from functools import cache
-from typing import ClassVar
+from typing import ClassVar, Union, Optional
 
 import pandas as pd
 import requests
@@ -27,11 +27,11 @@ class _API(ABC):
 
     @classmethod
     @abstractmethod
-    def get(cls, *, user_agent: None | str = None) -> pd.DataFrame:
+    def get(cls, *, user_agent: Union[None, str] = None) -> pd.DataFrame:
         """Main dataset API method."""
 
     @classmethod
-    def get_ticker_list(cls, *, user_agent: None | str = None) -> list[str]:
+    def get_ticker_list(cls, *, user_agent: Union[None, str] = None) -> list[str]:
         """List the tickers in the index."""
         df = cls.get(user_agent=user_agent)
         return df["ticker"].tolist()
@@ -49,7 +49,7 @@ class DJIA(_API):
     url = "https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average"
 
     @classmethod
-    def get(cls, *, user_agent: None | str = None) -> pd.DataFrame:
+    def get(cls, *, user_agent: Union[None, str] = None) -> pd.DataFrame:
         """Get a dataframe containing data on the tickers in the DJIA.
 
         Examples:
@@ -99,7 +99,7 @@ class Nasdaq100(_API):
     url = "https://en.wikipedia.org/wiki/Nasdaq-100"
 
     @classmethod
-    def get(cls, *, user_agent: None | str = None) -> pd.DataFrame:
+    def get(cls, *, user_agent: Union[None, str] = None) -> pd.DataFrame:
         """Get a dataframe containing data on the tickers in the Nasdaq 100.
 
         Examples:
@@ -139,7 +139,7 @@ class SP500(_API):
     url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 
     @classmethod
-    def get(cls, *, user_agent: None | str = None) -> pd.DataFrame:
+    def get(cls, *, user_agent: Union[None, str] = None) -> pd.DataFrame:
         """Get a dataframe containing data on the tickers in the S&P 500.
 
         Examples:
@@ -194,7 +194,7 @@ implementation.
 """
 
 
-def _get(url: str, /, *, user_agent: None | str = None) -> requests.Response:
+def _get(url: str, /, *, user_agent: Union[None, str] = None) -> requests.Response:
     """Tickers API request helper.
 
     Args:
@@ -228,7 +228,7 @@ def _get(url: str, /, *, user_agent: None | str = None) -> requests.Response:
 
 
 @cache
-def get_ticker_set(*, user_agent: None | str = None) -> set[str]:
+def get_ticker_set(*, user_agent: Union[None, str] = None) -> set[str]:
     """Get the set of tickers from all the popular indices.
 
     Examples:

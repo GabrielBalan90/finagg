@@ -6,16 +6,15 @@ respecting 3rd party API rate limits to avoid server-side throttling.
 """
 
 import time
+import requests
 from abc import ABC, abstractmethod
 from collections import deque
 from datetime import timedelta
 from functools import update_wrapper
-from typing import Callable, Generic, ParamSpec, Sequence
+from typing import Callable, TypeVar,Generic, Sequence, Union, Dict, Tuple
 
-import requests
-
-_P = ParamSpec("_P")
-
+# _P = ParamSpec("_P")
+_P = TypeVar('_P')
 
 class RateLimit(ABC):
     """Interface for defining a rate limit for an external API getter.
@@ -57,7 +56,7 @@ class RateLimit(ABC):
     period: float
 
     def __init__(
-        self, limit: float, period: float | timedelta, /, *, buffer: float = 0.0
+        self, limit: float, period: Union[float, timedelta], /, *, buffer: float = 0.0
     ) -> None:
         self.limit = limit * (1 - buffer)
         self.period = (
@@ -130,7 +129,7 @@ class RateLimit(ABC):
         return self._total_wait
 
     @abstractmethod
-    def eval(self, response: requests.Response, /) -> float | dict[str, float]:
+    def eval(self, response: requests.Response, /) -> Union[float, Dict[str, float]]:
         """Evaluate a response and determine how much it contributes
         to the max limit imposed by this instance.
 
@@ -156,7 +155,7 @@ class RateLimit(ABC):
 class RequestLimit(RateLimit):
     """Limit the number of requests made by the underlying getter."""
 
-    def eval(self, response: requests.Response, /) -> float | dict[str, float]:
+    def eval(self, response: requests.Response, /) -> Union[float, Dict[str, float]]:
         if hasattr(response, "from_cache") and response.from_cache:
             return 0.0
         return float(1)
@@ -165,7 +164,7 @@ class RequestLimit(RateLimit):
 class ErrorLimit(RateLimit):
     """Limit the number of errors occurred when using the underlying getter."""
 
-    def eval(self, response: requests.Response, /) -> float | dict[str, float]:
+    def eval(self, response: requests.Response, /) -> Union[float, Dict[str, float]]:
         if hasattr(response, "from_cache") and response.from_cache:
             return 0.0
         return float(response.status_code != 200)
@@ -174,7 +173,7 @@ class ErrorLimit(RateLimit):
 class SizeLimit(RateLimit):
     """Limit the size of responses when using the underlying getter."""
 
-    def eval(self, response: requests.Response, /) -> float | dict[str, float]:
+    def eval(self, response: requests.Response, /) -> Union[float, Dict[str, float]]:
         if hasattr(response, "from_cache") and response.from_cache:
             return 0.0
         return float(len(response.content))
@@ -199,10 +198,10 @@ class RateLimitGuard(Generic[_P]):
     """
 
     #: ``requests``-like getter that returns a response.
-    f: Callable[_P, requests.Response]
+    f: Callable[..., requests.Response]
 
     #: Limits to apply to requests/responses.
-    limits: tuple[RateLimit, ...]
+    limits: Tuple[RateLimit, ...]
 
     #: Whether to print a warning when requests are being temporarily blocked
     #: to respect imposed rate limits.
@@ -210,8 +209,8 @@ class RateLimitGuard(Generic[_P]):
 
     def __init__(
         self,
-        f: Callable[_P, requests.Response],
-        limits: tuple[RateLimit, ...],
+        f: Callable[..., requests.Response],
+        limits: Tuple[RateLimit, ...],
         /,
         *,
         warn: bool = False,
@@ -221,7 +220,7 @@ class RateLimitGuard(Generic[_P]):
         self.warn = warn
         update_wrapper(self, f)
 
-    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> requests.Response:
+    def __call__(self, *args: Union[str, int], **kwargs: Union[str, int]) -> requests.Response:
         """Call the underlying getter and sleep the wait required to
         satisfy the guard's limits.
 

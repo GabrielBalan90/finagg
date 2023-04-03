@@ -2,7 +2,7 @@
 
 import logging
 from datetime import datetime, timedelta
-from typing import Literal
+from typing import Literal, Union
 
 import numpy as np
 import pandas as pd
@@ -42,12 +42,12 @@ class RefinedIndustryFundamental:
         cls,
         /,
         *,
-        ticker: None | str = None,
-        code: None | str = None,
+        ticker: Union[None, str] = None,
+        code: Union[None, str] = None,
         level: Literal[2, 3, 4] = 2,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get fundamental features from the feature store,
         aggregated for an entire industry.
@@ -180,9 +180,9 @@ class RefinedNormalizedFundamental:
         /,
         *,
         level: Literal[2, 3, 4] = 2,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from other feature SQL tables.
 
@@ -247,9 +247,9 @@ class RefinedNormalizedFundamental:
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from the features SQL table.
 
@@ -309,7 +309,7 @@ class RefinedNormalizedFundamental:
 
     @classmethod
     def get_candidate_ticker_set(
-        cls, lb: int = 1, *, engine: None | Engine = None
+        cls, lb: int = 1, *, engine: Union[None, Engine] = None
     ) -> set[str]:
         """Get all unique tickers in the fundamental SQL table that MAY BE
         ELIGIBLE to be in the feature's SQL table.
@@ -335,7 +335,7 @@ class RefinedNormalizedFundamental:
         return RefinedFundamental.get_ticker_set(lb=lb, engine=engine)
 
     @classmethod
-    def get_ticker_set(cls, lb: int = 1, *, engine: None | Engine = None) -> set[str]:
+    def get_ticker_set(cls, lb: int = 1, *, engine: Union[None, Engine] = None) -> set[str]:
         """Get all unique tickers in the feature's SQL table.
 
         Args:
@@ -378,8 +378,8 @@ class RefinedNormalizedFundamental:
         /,
         *,
         ascending: bool = True,
-        date: int | str = 0,
-        engine: None | Engine = None,
+        date: Union[int, str] = 0,
+        engine: Union[None, Engine] = None,
     ) -> list[str]:
         """Get all tickers in the feature's SQL table sorted by a particular
         column for a date.
@@ -444,7 +444,7 @@ class RefinedNormalizedFundamental:
 
     @classmethod
     def install(
-        cls, tickers: None | set[str] = None, *, engine: None | Engine = None
+        cls, tickers: Union[None, set[str]] = None, *, engine: Union[None, Engine] = None
     ) -> int:
         """Drop the feature's table, create a new one, and insert data
         transformed from another raw SQL table.
@@ -491,7 +491,7 @@ class RefinedNormalizedFundamental:
         df: pd.DataFrame,
         /,
         *,
-        engine: None | Engine = None,
+        engine: Union[None, Engine] = None,
     ) -> int:
         """Write the dataframe to the feature store for ``ticker``.
 
@@ -620,8 +620,8 @@ class RefinedFundamental(feat.Features):
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get features directly from APIs.
 
@@ -664,9 +664,9 @@ class RefinedFundamental(feat.Features):
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features directly from other refined SQL tables.
 
@@ -718,9 +718,9 @@ class RefinedFundamental(feat.Features):
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features directly from other raw SQL tables.
 
@@ -772,9 +772,9 @@ class RefinedFundamental(feat.Features):
         ticker: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Union[None, str] = None,
+        end: Union[None, str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from the feature-dedicated local SQL tables.
 
@@ -832,7 +832,7 @@ class RefinedFundamental(feat.Features):
 
     @classmethod
     def get_candidate_ticker_set(
-        cls, lb: int = 1, *, engine: None | Engine = None
+        cls, lb: int = 1, *, engine: Union[None, Engine] = None
     ) -> set[str]:
         """Get all unique tickers in the raw SQL table that MAY BE ELIGIBLE
         to be in the feature's SQL table.
@@ -858,7 +858,7 @@ class RefinedFundamental(feat.Features):
         ) & yfinance.feat.RefinedDaily.get_ticker_set(lb=lb, engine=engine)
 
     @classmethod
-    def get_ticker_set(cls, lb: int = 1, *, engine: None | Engine = None) -> set[str]:
+    def get_ticker_set(cls, lb: int = 1, *, engine: Union[None, Engine] = None) -> set[str]:
         """Get all unique tickers in the feature's SQL table.
 
         Args:
@@ -896,7 +896,7 @@ class RefinedFundamental(feat.Features):
 
     @classmethod
     def install(
-        cls, tickers: None | set[str] = None, *, engine: None | Engine = None
+        cls, tickers: Union[None, set[str]] = None, *, engine: Union[None, Engine] = None
     ) -> int:
         """Drop the feature's table, create a new one, and insert data
         transformed from another raw SQL table.
@@ -943,7 +943,7 @@ class RefinedFundamental(feat.Features):
         df: pd.DataFrame,
         /,
         *,
-        engine: None | Engine = None,
+        engine: Union[None, Engine] = None,
     ) -> int:
         """Write the dataframe to the feature store for ``ticker``.
 

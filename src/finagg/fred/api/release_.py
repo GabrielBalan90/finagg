@@ -7,7 +7,7 @@ See the official FRED API docs for more info:
 """
 
 import pandas as pd
-
+from typing import Union
 from . import _api
 
 
@@ -26,14 +26,15 @@ class ReleasesDates(_api.API):
     def get(
         cls,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = "release_date",
-        sort_order: None | str = "desc",
-        include_release_dates_with_no_data: None | bool = False,
-        api_key: None | str = None,
+        # realtime_start: None | int | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = "release_date",
+        sort_order: Union[None, str] = "desc",
+        include_release_dates_with_no_data: Union[None, bool] = False,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get all release dates of economic data.
 
@@ -97,13 +98,14 @@ class Releases(_api.API):
     def get(
         cls,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = "release_date",
+        sort_order: Union[None, str] = "desc",
+        include_release_dates_with_no_data: Union[None, bool] = False,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get all releases of economic data.
 
@@ -167,13 +169,20 @@ class ReleaseDates(_api.API):
         release_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 10000,
-        offset: None | int = 0,
-        sort_order: None | str = None,
-        include_release_dates_with_no_data: None | bool = False,
-        api_key: None | str = None,
+        # realtime_start: None | int | str = None,
+        # realtime_end: None | int | str = None,
+        # limit: None | int = 10000,
+        # offset: None | int = 0,
+        # sort_order: None | str = None,
+        # include_release_dates_with_no_data: None | bool = False,
+        # api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        sort_order: Union[None, str] = None,
+        include_release_dates_with_no_data: Union[None, bool] = False,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get data on release dates for a particular release of economic data.
 
@@ -232,17 +241,28 @@ class Series(_api.API):
         release_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        filter_variable: None | str = None,
-        filter_value: None | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        api_key: None | str = None,
+        # realtime_start: Union[None, int, str] = None,
+        # realtime_end: None | int | str = None,
+        # limit: None | int = 1000,
+        # offset: None | int = 0,
+        # order_by: None | str = None,
+        # sort_order: None | str = None,
+        # filter_variable: None | str = None,
+        # filter_value: None | str = None,
+        # tag_names: None | str | list[str] = None,
+        # exclude_tag_names: None | str | list[str] = None,
+        # api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        filter_variable: Union[None, str] = None,
+        filter_value: Union[None, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get data on the series related to a release of economic data.
 
@@ -329,9 +349,9 @@ class Sources(_api.API):
         release_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get sources related to an economic release.
 
@@ -380,16 +400,26 @@ class Tags(_api.API):
         release_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        # realtime_start: None | int | str = None,
+        # realtime_end: None | int | str = None,
+        # tag_names: None | str | list[str] = None,
+        # tag_group_id: None | str = None,
+        # search_text: None | str | list[str] = None,
+        # limit: None | int = 1000,
+        # offset: None | int = 0,
+        # order_by: None | str = None,
+        # sort_order: None | str = None,
+        # api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        tag_group_id: Union[None, str] = None,
+        search_text: Union[None, str, list[str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get tags for an economic release.
 
@@ -470,17 +500,26 @@ class RelatedTags(_api.API):
         release_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        tag_names: None | str | list[str] = None,
-        exclude_tag_names: None | str | list[str] = None,
-        tag_group_id: None | str = None,
-        search_text: None | str | list[str] = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        # realtime_start: None | int | str = None,
+        # realtime_end: None | int | str = None,
+        # tag_names: None | str | list[str] = None,
+        # exclude_tag_names: None | str | list[str] = None,
+        # tag_group_id: None | str = None,
+        # search_text: None | str | list[str] = None,
+        # limit: None | int = 1000,
+        # offset: None | int = 0,
+        # order_by: None | str = None,
+        # sort_order: None | str = None,
+        # api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        tag_names: Union[None, str, list[str]] = None,
+        exclude_tag_names: Union[None, str, list[str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get data for tags related to an economic release.
 
@@ -563,10 +602,10 @@ class Tables(_api.API):
         release_id: int,
         /,
         *,
-        element_id: None | int = 0,
-        include_observation_values: None | bool = False,
-        observation_date: None | str = None,
-        api_key: None | str = None,
+        element_id: Union[None, int] = 0,
+        include_observation_values: Union[None, bool] = False,
+        observation_date: Union[None, str] = None,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get release tables for a given economic release.
 
@@ -658,9 +697,9 @@ class Release(_api.API):
         release_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Union[None, int, str] = None,
+        realtime_end: Union[None, int, str] = None,
+        api_key: Union[None, str] = None,
     ) -> pd.DataFrame:
         """Get overview data of an economic release.
 

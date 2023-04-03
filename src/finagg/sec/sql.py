@@ -4,7 +4,7 @@ from typing import Any, Literal
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
-
+from typing import Union
 from .. import backend
 
 metadata = sa.MetaData()
@@ -159,7 +159,7 @@ normalized_quarterly = sa.Table(
 )
 
 
-def get_cik(ticker: str, /, *, engine: None | Engine = None) -> str:
+def get_cik(ticker: str, /, *, engine: Union[None, Engine] = None) -> str:
     """Use raw SQL data to find a company's SEC CIK from its ticker symbol.
 
     This is the preferred method for getting a company's SEC CIK if raw SQL
@@ -193,7 +193,7 @@ def get_cik(ticker: str, /, *, engine: None | Engine = None) -> str:
 
 
 def get_metadata(
-    *, cik: None | str = None, ticker: None | str = None, engine: None | Engine = None
+    *, cik: Union[None, str], ticker: [None, str] = None, engine: [None, Engine] = None
 ) -> dict[str, Any]:
     """Return a company's metadata (its SEC CIK, ticker, name, and industry
     code) from its SEC CIK or its ticker symbol.
@@ -239,7 +239,7 @@ def get_metadata(
     return row._asdict()
 
 
-def get_ticker(cik: str, /, *, engine: None | Engine = None) -> str:
+def get_ticker(cik: str, /, *, engine: Union[None, Engine] = None) -> str:
     """Use raw SQL data to find a company's ticker from its SEC CIK.
 
     This is the preferred method for getting a company's ticker if raw SQL
@@ -276,7 +276,7 @@ def get_ticker(cik: str, /, *, engine: None | Engine = None) -> str:
 def get_ticker_set(
     lb: int = 1,
     *,
-    engine: None | Engine = None,
+    engine: Union[None, Engine] = None,
 ) -> set[str]:
     """Get all unique ticker symbols in the raw SQL tables that have at least
     ``lb`` rows.
@@ -315,10 +315,10 @@ def get_ticker_set(
 
 def get_tickers_in_industry(
     *,
-    ticker: None | str = None,
-    code: None | str = None,
+    ticker: Union[None, str] = None,
+    code: Union[None, str] = None,
     level: Literal[2, 3, 4] = 2,
-    engine: None | Engine = None,
+    engine: Union[None, Engine] = None,
 ) -> set[str]:
     """Get a set of tickers that all share the same industry using raw SQL data.
 

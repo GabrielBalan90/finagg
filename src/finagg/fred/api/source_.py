@@ -7,7 +7,7 @@ See the official FRED API docs for more info:
 """
 
 import pandas as pd
-
+from typing import Union, Optional
 from . import _api
 
 
@@ -28,13 +28,13 @@ class Releases(_api.API):
         source_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get all releases for a source of economic data.
 
@@ -116,9 +116,9 @@ class Source(_api.API):
         source_id: int,
         /,
         *,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get overview data of an economic series.
 
@@ -169,13 +169,13 @@ class Sources(_api.API):
     @classmethod
     def get(
         cls,
-        realtime_start: None | int | str = None,
-        realtime_end: None | int | str = None,
-        limit: None | int = 1000,
-        offset: None | int = 0,
-        order_by: None | str = None,
-        sort_order: None | str = None,
-        api_key: None | str = None,
+        realtime_start: Optional[Union[int, str]] = None,
+        realtime_end: Optional[Union[int, str]] = None,
+        limit: Union[None, int] = 1000,
+        offset: Union[None, int] = 0,
+        order_by: Union[None, str] = None,
+        sort_order: Union[None, str] = None,
+        api_key: Union[None, Optional[str]] = None,
     ) -> pd.DataFrame:
         """Get all sources of economic data.
 

@@ -3,7 +3,7 @@
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
-
+from typing import Union
 from .. import backend
 
 metadata = sa.MetaData()
@@ -46,7 +46,7 @@ sp500 = sa.Table(
 )
 
 
-def get_ticker_set(*, engine: None | Engine = None) -> set[str]:
+def get_ticker_set(*, engine: Union[None, Engine] = None) -> set[str]:
     """Get all unique tickers in the raw SQL tables.
 
     Args:

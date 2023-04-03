@@ -8,7 +8,7 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import NoResultFound
 from tqdm import tqdm
-
+from typing import Union, Optional
 from .. import backend, feat, utils
 from . import api, sql
 
@@ -33,9 +33,9 @@ class RefinedTimeSummarizedEconomic:
         cls,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get the average and standard deviation of each series's
         feature across its history.
@@ -119,9 +119,9 @@ class RefinedNormalizedEconomic:
     def from_other_refined(
         cls,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from other feature SQL tables.
 
@@ -166,9 +166,9 @@ class RefinedNormalizedEconomic:
         cls,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from the feature-dedicated local SQL tables.
 
@@ -222,7 +222,7 @@ class RefinedNormalizedEconomic:
         return df
 
     @classmethod
-    def install(cls, *, engine: None | Engine = None) -> int:
+    def install(cls, *, engine: Union[None, Engine] = None) -> int:
         """Drop the feature's table, create a new one, and insert data
         transformed from another raw SQL table.
 
@@ -254,7 +254,7 @@ class RefinedNormalizedEconomic:
         df: pd.DataFrame,
         /,
         *,
-        engine: None | Engine = None,
+        engine: Union[None, Engine] = None,
     ) -> int:
         """Write the dataframe to the feature store.
 
@@ -376,7 +376,7 @@ class RefinedEconomic(feat.Features):
 
     @classmethod
     def from_api(
-        cls, *, start: None | str = None, end: None | str = None
+        cls, *, start: Optional[str] = None, end: Union[None, str] = None
     ) -> pd.DataFrame:
         """Get economic features directly from the FRED API.
 
@@ -425,9 +425,9 @@ class RefinedEconomic(feat.Features):
     def from_raw(
         cls,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get economic features from local FRED SQL tables.
 
@@ -483,9 +483,9 @@ class RefinedEconomic(feat.Features):
         cls,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get features from the feature-dedicated local SQL tables.
 
@@ -538,7 +538,7 @@ class RefinedEconomic(feat.Features):
         return df
 
     @classmethod
-    def install(cls, *, engine: None | Engine = None) -> int:
+    def install(cls, *, engine: Union[None, Engine] = None) -> int:
         """Drop the feature's table, create a new one, and insert data
         transformed from another raw SQL table.
 
@@ -570,7 +570,7 @@ class RefinedEconomic(feat.Features):
         df: pd.DataFrame,
         /,
         *,
-        engine: None | Engine = None,
+        engine: Union[None, Engine] = None,
     ) -> int:
         """Write the dataframe to the feature store.
 
@@ -615,9 +615,9 @@ class RawSeries:
         series_id: str,
         /,
         *,
-        start: None | str = None,
-        end: None | str = None,
-        engine: None | Engine = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        engine: Union[None, Engine] = None,
     ) -> pd.DataFrame:
         """Get a single economic data series as-is from raw FRED data.
 
@@ -671,7 +671,7 @@ class RawSeries:
 
     @classmethod
     def install(
-        cls, series_ids: None | set[str] = None, *, engine: None | Engine = None
+        cls, series_ids: Union[None, set[str]] = None, *, engine: Union[None, Engine] = None
     ) -> int:
         """Drop the feature's table, create a new one, and insert data
         as-is from the FRED API.
@@ -717,7 +717,7 @@ class RawSeries:
         return total_rows
 
     @classmethod
-    def to_raw(cls, df: pd.DataFrame, /, *, engine: None | Engine = None) -> int:
+    def to_raw(cls, df: pd.DataFrame, /, *, engine: Union[None, Engine] = None) -> int:
         """Write the given dataframe to the raw feature table.
 
         Args:

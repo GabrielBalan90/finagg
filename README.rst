@@ -238,9 +238,8 @@ so we encourage you to do just that!
 What Python versions are supported?
 -----------------------------------
 
-Python 3.10 and up are supported. We don't plan on supporting lower versions
-because 3.10 introduces some nice quality of life updates that are used
-throughout the package.
+Initially only Python 3.10 and up were supported. After some refactoring, this nifty tool can support Python 3.9 and up. 
+For Python 3.10 please refer to the original project: https://github.com/theOGognf/finagg
 
 What operating systems are supported?
 -------------------------------------
